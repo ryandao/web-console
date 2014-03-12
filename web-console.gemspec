@@ -23,4 +23,7 @@ Gem::Specification.new do |s|
   # We need those for the testing application to run.
   s.add_development_dependency "actionmailer", rails_version
   s.add_development_dependency "activerecord", rails_version
+  s.add_dependency "jquery-rails", "~> 3.0.4"
+  s.add_dependency "binding_of_caller"
+  s.add_development_dependency "sqlite3"
 end
