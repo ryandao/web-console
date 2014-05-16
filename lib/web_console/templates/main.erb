@@ -6,7 +6,7 @@
   <script src="/assets/jquery.js?body=1"></script>
   <script src="/assets/jquery_ujs.js?body=1"></script>
   <script src="/assets/jquery.console.js?body=1"></script>
-  <script src="/assets/web_console/console_sessions.js?body=1"></script>
+  <script src="/assets/web_console/console_sessions_repl.js?body=1"></script>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
 
     <div class="row">
       <div id="console"
-        data-remote-path='<%= "console/console_sessions/#{@console_session.id}" %>'
+        data-remote-path='<%= "console/console_sessions_repl/#{@console_session.id}" %>'
         data-initial-prompt='<%= @console_session.prompt %>'>
       </div>
     </div>
