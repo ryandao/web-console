@@ -16,7 +16,7 @@ module WebConsole
 
     def initialize(exception, env)
       @exception = real_exception(exception)
-      @console_session = ConsoleSessionREPL.create binding_from_exception
+      @console_session = REPLSession.create binding_from_exception
       @env = env
       @start_time = Time.now.to_f
       @repls = []
