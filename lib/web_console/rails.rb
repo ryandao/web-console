@@ -1,7 +1,7 @@
 module WebConsole
   # @private
   class Railtie < Rails::Railtie
-    initializer "better_errors.configure_rails_initialization" do
+    initializer "web_console.configure_rails_initialization" do
       WebConsole.logger = Rails.logger
       WebConsole.application_root = Rails.root.to_s
       insert_middleware

@@ -36,15 +36,6 @@ module WebConsole
     end
 
     def web_console_call(env)
-      case env["PATH_INFO"]
-      when %r{/__web_console/?\z}
-        show_error_page env
-      else
-        protected_app_call env
-      end
-    end
-
-    def protected_app_call(env)
       @app.call env
     rescue Exception => ex
       @error_page = @handler.new ex, env
