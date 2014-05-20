@@ -89,7 +89,6 @@ module WebConsole
         synchronize do
           # Don't send any input on the initial population so we don't bump up
           # the numbers in the dynamic prompts.
-          @repl.binding = self.binding
           self.output = @repl.send_input(input) unless options[:initial]
           self.prompt = @repl.prompt
         end
