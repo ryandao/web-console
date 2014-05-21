@@ -2,28 +2,26 @@ require "cgi"
 require "json"
 
 module WebConsole
-  # @private
   class ErrorPage
-    def self.template_path(template_name)
-      File.expand_path("../templates/#{template_name}.erb", __FILE__)
-    end
+    TEMPLATE_PATH = File.expand_path("../templates", __FILE__)
 
-    def self.template(template_name)
-      Erubis::EscapedEruby.new(File.read(template_path(template_name)))
-    end
-
-    attr_reader :exception, :env, :repls
+    attr_reader :exception, :env
 
     def initialize(exception, env)
       @exception = real_exception(exception)
       @console_session = REPLSession.create binding_from_exception
       @env = env
-      @start_time = Time.now.to_f
-      @repls = []
+    end
+
+    def template
+      @template ||= ActionView::Base.new([TEMPLATE_PATH],
+        exception: @exception,
+        console_session: @console_session
+      )
     end
 
     def render(template_name = "main")
-      self.class.template(template_name).result binding
+      template.render(template: "#{template_name}.erb")
     end
 
   private
