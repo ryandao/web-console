@@ -90,12 +90,20 @@
         }
       }
 
+      // HTML strings for dynamic elements.
+
+      var promptBoxHtml = [
+        "<span class='console-prompt-label' style='display: inline;'></span>",
+        "<span class='console-prompt-display'></span>"
+      ].join("");
+
       // REPLConsole Constructor
       function REPLConsole(config) {
         this.commandStorage = new CommandStorage();
         this.prompt = config && config.promptLabel ? config.promptLabel : ' >>';
         this.commandHandle = config && config.commandHandle ? config.commandHandle : function() { return this; }
       }
+
 
       REPLConsole.prototype.install = function(container) {
         var _this = this;
@@ -149,26 +157,20 @@
        * Add a new empty prompt box to the console.
        */
       REPLConsole.prototype.newPromptBox = function() {
-        // Remove the caret from previous prompt box if any.
-        if (this.promptInput) {
+        // Remove the caret from previous prompt display if any.
+        if (this.promptDisplay) {
           this.removeCaretFromPrompt();
         }
 
         var promptBox = document.createElement('div');
         promptBox.className = "console-prompt-box";
-        var promptLabel = document.createElement('span');
-        promptLabel.className ="console-prompt-label";
-        promptLabel.style.display = "inline";
-        promptLabel.innerHTML = this.prompt;
-        var promptInput = document.createElement('span');
-        promptInput.className = "console-prompt";
-        promptBox.appendChild(promptLabel);
-        promptBox.appendChild(promptInput);
-        this.inner.appendChild(promptBox);
-
-        this.promptLabel = promptLabel;
-        this.promptInput = promptInput;
+        promptBox.innerHTML = promptBoxHtml;
+        this.promptLabel = promptBox.getElementsByClassName('console-prompt-label')[0];
+        this.promptDisplay = promptBox.getElementsByClassName('console-prompt-display')[0];
+        // Render the prompt box
         this.setInput("");
+        this.promptLabel.innerHTML = this.prompt;
+        this.inner.appendChild(promptBox);
         this.scrollToBottom();
       };
 
@@ -194,11 +196,11 @@
        */
       REPLConsole.prototype.renderInput = function() {
         // Clear the current input.
-        removeAllChildren(this.promptInput);
+        removeAllChildren(this.promptDisplay);
 
         var promptCursor = document.createElement('span');
         promptCursor.className = "console-cursor";
-        var before, current, master;
+        var before, current, after;
 
         if (this._caretPos < 0) {
           before = this._input;
@@ -213,10 +215,10 @@
           after = this._input.substring(this._caretPos + 1, this._input.length);
         }
 
-        this.promptInput.appendChild(document.createTextNode(before));
+        this.promptDisplay.appendChild(document.createTextNode(before));
         promptCursor.appendChild(document.createTextNode(current));
-        this.promptInput.appendChild(promptCursor);
-        this.promptInput.appendChild(document.createTextNode(after));
+        this.promptDisplay.appendChild(promptCursor);
+        this.promptDisplay.appendChild(document.createTextNode(after));
       };
 
       REPLConsole.prototype.writeOutput = function(output) {
